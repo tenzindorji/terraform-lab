@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Checkout') {
             steps {
-                git branch: 'main',
+                git branch: 'master',
                     url: "${GIT_REPO}"
             }
         }
