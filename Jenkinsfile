@@ -31,16 +31,6 @@ spec:
                     url: "${GIT_REPO}"
             }
         }
-        stage('Install Terraform') {
-            steps {
-                sh '''
-                    wget -q https://releases.hashicorp.com/terraform/1.13.5/terraform_1.13.5_linux_amd64.zip
-                    unzip -o terraform_1.13.5_linux_amd64.zip
-                    chmod +x terraform
-                    ./terraform version
-                '''
-                }
-        }
         stage('Verify') {
             steps {
                 sh ''' 
