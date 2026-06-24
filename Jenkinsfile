@@ -33,29 +33,37 @@ spec:
         }
         stage('Verify') {
             steps {
+                container('terraform') {
                 sh ''' 
                     pwd
                     ls -ltr
                     terraform version
                 '''
             }
+            }
         }
         stage('Terraform init') {
             steps {
+                container('terraform') {
                 dir("${TF_DIR}")
                     sh 'terraform init'
+            }
             }
         }
         stage('Terraform validate') {
             steps {
+                container('terraform') {
                 dir("${TF_DIR}")
                     sh 'terraform validate'
+            }
             }
         }
         stage('Terraform plan') {
             steps {
+                container('terraform') {
                 dir("${TF_DIR}")
                     sh 'terraform plan -out=tfplan'
+            }
             }
         }
         stage('Approval') {
@@ -65,13 +73,15 @@ spec:
         }
         stage('TF Apply') {
             steps {
-                dir("${TF_DIR}")
-                    withCredentials([
-                        string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
-                        string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
-                        ]) {
-                            sh 'terraform apply -auto-approve tfplan'
-                         }
+                container('terraform') {
+                    dir("${TF_DIR}")
+                        withCredentials([
+                            string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
+                            string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
+                            ]) {
+                                sh 'terraform apply -auto-approve tfplan'
+                            }
+                }
             }
         
 
