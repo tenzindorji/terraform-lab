@@ -1,0 +1,66 @@
+# Terraform state
+*.tfstate
+*.tfstate.*
+
+# Terraform plan files
+*.tfplan
+*.plan
+
+# Terraform variables (often contain secrets)
+*.tfvars
+*.tfvars.json
+
+# Local override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform working directory
+.terraform/
+
+# Terraform lock file (optional)
+# Keep this if you want provider version consistency
+# .terraform.lock.hcl
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Sensitive files
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+
+# AWS credentials
+.aws/
+
+# Environment variables
+.env
+.env.*
+
+# IDE files
+.vscode/
+.idea/
+
+# Mac/Linux junk
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Jenkins
+workspace/
+
+# Pulumi (if you use it)
+Pulumi.*.yaml
+Pulumi.*.json
+
+# Logs
+*.log
