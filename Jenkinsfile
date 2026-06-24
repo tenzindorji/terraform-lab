@@ -57,7 +57,6 @@ spec:
                             }
                 }
             }
-        }
         stage('Approval') {
             steps {
                 input 'Apply tf changes?'
