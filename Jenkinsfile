@@ -42,28 +42,16 @@ spec:
             }
             }
         }
-        stage('Terraform init') {
+        stage('Terraform validate and plan') {
             steps {
                 container('terraform') {
-                dir("${TF_DIR}")
+                dir("${TF_DIR}") {
                     sh 'terraform init'
-            }
-            }
-        }
-        stage('Terraform validate') {
-            steps {
-                container('terraform') {
-                dir("${TF_DIR}")
                     sh 'terraform validate'
-            }
-            }
-        }
-        stage('Terraform plan') {
-            steps {
-                container('terraform') {
-                dir("${TF_DIR}")
                     sh 'terraform plan -out=tfplan'
-            }
+                    }
+                    
+                }
             }
         }
         stage('Approval') {
