@@ -45,12 +45,16 @@ spec:
         stage('Terraform validate and plan') {
             steps {
                 container('terraform') {
-                dir("${TF_DIR}") {
-                    sh 'terraform init'
-                    sh 'terraform validate'
-                    sh 'terraform plan -out=tfplan'
-                    }
-                    
+                dir("${TF_DIR}") 
+                    withCredentials([
+                            string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
+                            string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
+                            ]) {
+                                sh 'terraform init'
+                                sh 'terraform validate'
+                                sh 'terraform plan -out=tfplan'
+                                }
+                            }
                 }
             }
         }
