@@ -1,5 +1,19 @@
 pipeline {
-    agent any
+    agent {
+    kubernetes {
+      yaml '''
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: terraform
+    image: hashicorp/terraform:1.13
+    command:
+    - cat
+    tty: true
+'''
+    }
+  }
     environment {
         AWS_DEFAULT_REGION = "us-eat-2"
         GIT_REPO = 'https://github.com/tenzindorji/terraform-lab.git'
