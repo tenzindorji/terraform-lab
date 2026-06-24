@@ -17,31 +17,43 @@ pipeline {
                     url: "${GIT_REPO}"
             }
         }
+        stage('Install Terraform') {
+            steps {
+                sh '''
+                    apt-get update
+                    apt-get install -y wget unzip
+                    wget https://releases.hashicorp.com/terraform/1.13.5/terraform_1.13.5_linux_amd64.zip
+                    unzip terraform_1.13.5_linux_amd64.zip
+                    chmod +x terraform
+                    ./terraform version
+                '''
+  }
+}
         stage('Verify') {
             steps {
                 sh ''' 
                     pwd
                     ls -ltr
-                    terraform version
+                    ../../terraform version
                 '''
             }
         }
         stage('Terraform init') {
             steps {
                 dir("${TF_DIR}")
-                    sh 'terraform init'
+                    sh '../../terraform init'
             }
         }
         stage('Terraform validate') {
             steps {
                 dir("${TF_DIR}")
-                    sh 'terraform validate'
+                    sh '../../terraform validate'
             }
         }
         stage('Terraform plan') {
             steps {
                 dir("${TF_DIR}")
-                    sh 'terraform plan -out=tfplan'
+                    sh '../../terraform plan -out=tfplan'
             }
         }
         stage('Approval') {
@@ -56,7 +68,7 @@ pipeline {
                         string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
                         string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
                         ]) {
-                            sh 'terraform apply -auto-approve tfplan'
+                            sh '../../terraform apply -auto-approve tfplan'
                          }
             }
         
