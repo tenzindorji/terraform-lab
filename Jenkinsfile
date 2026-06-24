@@ -20,17 +20,6 @@ spec:
         TF_DIR   = 'environments/dev'
     }
     stages {
-        stage('Clean Workspace') {
-            steps {
-                deleteDir()
-            }
-        }
-        stage('Checkout') {
-            steps {
-                git branch: 'master',
-                    url: "${GIT_REPO}"
-            }
-        }
         stage('Verify') {
             steps {
                 container('terraform') {
@@ -43,20 +32,23 @@ spec:
             }
         }
         stage('Terraform validate and plan') {
-            steps {
-                container('terraform') {
-                dir("${TF_DIR}") 
-                    withCredentials([
-                            string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
-                            string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
-                            ]) {
-                                sh 'terraform init'
-                                sh 'terraform validate'
-                                sh 'terraform plan -out=tfplan'
-                                }
-                            }
+    steps {
+        container('terraform') {
+            withCredentials([
+                string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
+                string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')
+            ]) {
+                dir("${TF_DIR}") {
+                    sh '''
+                        terraform init
+                        terraform validate
+                        terraform plan -out=tfplan
+                    '''
                 }
             }
+        }
+    }
+}
         stage('Approval') {
             steps {
                 input 'Apply tf changes?'
