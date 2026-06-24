@@ -36,7 +36,7 @@ spec:
         container('terraform') {
             withCredentials([
                 string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
-                string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')
+                string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
             ]) {
                 dir("${TF_DIR}") {
                     sh '''
@@ -59,7 +59,7 @@ spec:
                 container('terraform') {
                     dir("${TF_DIR}")
                         withCredentials([
-                            string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
+                            string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
                             string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
                             ]) {
                                 sh 'terraform apply -auto-approve tfplan'
